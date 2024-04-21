@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 
 import {
@@ -37,6 +38,20 @@ const menu = [
 export default function NavBar() {
 	const pathname = usePathname();
 	const router = useRouter();
+	const { status } = useSession();
+
+	if (status === "loading") {
+		return null;
+	}
+
+	const handleSignOut = async () => {
+		const result = await fetch("/api/auth/signout");
+		router.push(result.url);
+	};
+
+	const handleSignIn = () => {
+		router.push("/api/auth/signin");
+	};
 
 	return (
 		<div className="flex items-center justify-between p-3">
@@ -56,9 +71,12 @@ export default function NavBar() {
 							</Link>
 						</li>
 					))}
-					<ColorButton onClick={() => router.push("/login")}>
-						Sign in
-					</ColorButton>
+					{status === "authenticated" && (
+						<ColorButton onClick={handleSignOut}>Sign out</ColorButton>
+					)}
+					{status === "unauthenticated" && (
+						<ColorButton onClick={handleSignIn}>Sign in</ColorButton>
+					)}
 				</ul>
 			</nav>
 		</div>
