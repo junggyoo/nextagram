@@ -1,9 +1,9 @@
-import { Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import { Open_Sans } from "next/font/google";
 import type { Metadata } from "next";
 
 import Header from "@/components/header";
+import AuthContext from "@/context/AuthContext";
+
 import "./globals.css";
 
 const openSans = Open_Sans({ subsets: ["latin"] });
@@ -15,18 +15,16 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
 	children,
-	params: { session },
 }: {
-	children: React.ReactNode;
-	params: { session: Session };
+	readonly children: React.ReactNode;
 }) {
 	return (
 		<html lang="en" data-theme="light" className={openSans.className}>
 			<body className="w-full max-w-screen-xl overflow-auto mx-auto">
-				<SessionProvider session={session}>
+				<AuthContext>
 					<Header />
 					<main>{children}</main>
-				</SessionProvider>
+				</AuthContext>
 			</body>
 		</html>
 	);

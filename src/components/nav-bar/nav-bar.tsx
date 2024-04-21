@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
+import { useSession, signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 
 import {
@@ -11,8 +11,8 @@ import {
 	NewIcon,
 	SearchFillIcon,
 	SearchIcon,
-} from "./ui/icons";
-import ColorButton from "./ui/buttons/ColorButton";
+} from "../ui/icons";
+import ColorButton from "../ui/buttons/ColorButton";
 
 const menu = [
 	{
@@ -37,20 +37,14 @@ const menu = [
 
 export default function NavBar() {
 	const pathname = usePathname();
-	const router = useRouter();
-	const { status } = useSession();
+	const { data: session } = useSession();
 
-	if (status === "loading") {
-		return null;
-	}
-
-	const handleSignOut = async () => {
-		const result = await fetch("/api/auth/signout");
-		router.push(result.url);
+	const handleSignOut = () => {
+		signOut();
 	};
 
 	const handleSignIn = () => {
-		router.push("/api/auth/signin");
+		signIn();
 	};
 
 	return (
@@ -71,10 +65,9 @@ export default function NavBar() {
 							</Link>
 						</li>
 					))}
-					{status === "authenticated" && (
+					{session ? (
 						<ColorButton onClick={handleSignOut}>Sign out</ColorButton>
-					)}
-					{status === "unauthenticated" && (
+					) : (
 						<ColorButton onClick={handleSignIn}>Sign in</ColorButton>
 					)}
 				</ul>
