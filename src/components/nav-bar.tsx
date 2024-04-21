@@ -1,37 +1,66 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { Home, Search, SquarePlus } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+
+import {
+	HomeFillIcon,
+	HomeIcon,
+	NewFillIcon,
+	NewIcon,
+	SearchFillIcon,
+	SearchIcon,
+} from "./ui/icons";
+import ColorButton from "./ui/buttons/ColorButton";
+
+const menu = [
+	{
+		title: "Home",
+		icon: <HomeIcon />,
+		activeIcon: <HomeFillIcon />,
+		href: "/",
+	},
+	{
+		title: "Search",
+		icon: <SearchIcon />,
+		activeIcon: <SearchFillIcon />,
+		href: "/search",
+	},
+	{
+		title: "New",
+		icon: <NewIcon />,
+		activeIcon: <NewFillIcon />,
+		href: "/new",
+	},
+];
 
 export default function NavBar() {
 	const pathname = usePathname();
+	const router = useRouter();
 
 	return (
-		<nav className="sticky top-0 flex justify-between p-5">
-			<h1 className="text-2xl">Nextagram</h1>
-			<div className="flex items-center gap-2">
-				<ul className="menu-md menu-horizontal bg-base-200 rounded-box">
-					<li>
-						<Link className="flex items-center justify-center" href="/">
-							<Home color={pathname === "/" ? "black" : "gray"} />
-						</Link>
-					</li>
-					<li>
-						<Link className="flex items-center justify-center" href="search">
-							<Search color={pathname === "/search" ? "black" : "gray"} />
-						</Link>
-					</li>
-					<li>
-						<Link className="flex items-center justify-center" href="create">
-							<SquarePlus color={pathname === "/create" ? "black" : "gray"} />
-						</Link>
-					</li>
+		<div className="flex items-center justify-between p-3">
+			<Link href="/">
+				<h1 className="text-3xl font-bold">Nextagram</h1>
+			</Link>
+			<nav className="flex">
+				<ul className="flex items-center gap-x-5 menu-md menu-horizontal bg-base-200 rounded-box">
+					{menu.map((item) => (
+						<li key={item.title}>
+							<Link
+								prefetch
+								href={item.href}
+								className="flex items-center justify-center"
+							>
+								{pathname === item.href ? item.activeIcon : item.icon}
+							</Link>
+						</li>
+					))}
+					<ColorButton onClick={() => router.push("/login")}>
+						Sign in
+					</ColorButton>
 				</ul>
-				<button className="btn btn-ghost">
-					<Link href="/login">Sign in</Link>
-				</button>
-			</div>
-		</nav>
+			</nav>
+		</div>
 	);
 }

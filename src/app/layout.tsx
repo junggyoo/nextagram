@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 
 import NavBar from "@/components/nav-bar";
 
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const openSans = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: "Nextagram",
@@ -18,10 +18,12 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" data-theme="light">
-			<body className={inter.className}>
-				<NavBar />
-				{children}
+		<html lang="en" data-theme="light" className={openSans.className}>
+			<body className="w-full max-w-screen-xl overflow-auto mx-auto">
+				<header className="sticky top-0 bg-white z-10 border-b">
+					<NavBar />
+				</header>
+				<main>{children}</main>
 			</body>
 		</html>
 	);
