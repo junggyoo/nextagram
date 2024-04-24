@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
 import {
@@ -37,6 +37,7 @@ const menu = [
 
 export default function NavBar() {
 	const pathname = usePathname();
+	const router = useRouter();
 	const { data: session } = useSession();
 
 	const handleSignOut = () => {
@@ -44,7 +45,8 @@ export default function NavBar() {
 	};
 
 	const handleSignIn = () => {
-		signIn();
+		sessionStorage.setItem("prevPageUrl", pathname);
+		router.push("/sign-in");
 	};
 
 	return (

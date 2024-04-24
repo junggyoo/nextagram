@@ -8,4 +8,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 			clientSecret: process.env.OAUTH_GOOGLE_SECRET,
 		}),
 	],
+	pages: {
+		signIn: "/signin",
+	},
 });
