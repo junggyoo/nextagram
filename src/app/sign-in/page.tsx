@@ -1,19 +1,12 @@
 "use client";
 
 import { signIn } from "next-auth/react";
+
 import ColorButton from "@/components/ui/buttons/ColorButton";
 
+import { getPrevPageUrl } from "@/utils";
+
 export default function SignInPage() {
-	const getPrevPageUrl = () => {
-		const prevPageUrl = sessionStorage.getItem("prevPageUrl");
-
-		if (!prevPageUrl) {
-			return "/";
-		}
-
-		return prevPageUrl;
-	};
-
 	return (
 		<section className="flex justify-center items-center h-screen">
 			<ColorButton
